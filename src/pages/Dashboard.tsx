@@ -187,12 +187,12 @@ export default function Dashboard() {
           >
             <div>
               <p className="font-heading font-bold text-2xl text-[#C4704B]">{streak}</p>
-              <p className="text-xs text-gray-600 mt-1">שבועות ברצף 🔥</p>
+              <p className="text-xs text-gray-600 mt-1">{s.streakWeeks}</p>
             </div>
             <div className="border-r border-amber-200" />
             <div>
               <p className="font-heading font-bold text-2xl text-[#C4704B]">{totalCompleted}</p>
-              <p className="text-xs text-gray-600 mt-1">שיחות הושלמו</p>
+              <p className="text-xs text-gray-600 mt-1">{s.sessionsCompleted}</p>
             </div>
           </motion.div>
         )}

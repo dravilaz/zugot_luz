@@ -31,7 +31,7 @@ export default function WeekReview() {
       <div className="min-h-screen p-4 flex items-center justify-center">
         <div className="card text-center space-y-4">
           <p className="text-4xl">📋</p>
-          <p className="text-gray-500">אין שיחה פעילה השבוע</p>
+          <p className="text-gray-500">{s.noActiveSession}</p>
           <button onClick={() => navigate('/')} className="btn-secondary w-full">
             {strings.common.back}
           </button>
@@ -252,7 +252,7 @@ function ReadOnlyIntentions({
     <div>
       <p className="text-xs font-semibold text-[#C4704B] mb-1.5">{name}</p>
       {items.length === 0 ? (
-        <p className="text-xs text-gray-400 italic">לא נרשמו כוונות</p>
+        <p className="text-xs text-gray-400 italic">{strings.review.noIntentions}</p>
       ) : (
         <ul className="space-y-1">
           {items.map((item) => (

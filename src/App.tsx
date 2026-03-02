@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useSettingsStore } from './store/useSettingsStore'
 import Onboarding from './pages/Onboarding'
 import Dashboard from './pages/Dashboard'
@@ -16,16 +17,30 @@ function RequireSetup({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
-export default function App() {
+function PageTransition({ children }: { children: React.ReactNode }) {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/onboarding" element={<Onboarding />} />
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.28, ease: 'easeInOut' }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function AppRoutes() {
+  const location = useLocation()
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/onboarding" element={<PageTransition><Onboarding /></PageTransition>} />
         <Route
           path="/"
           element={
             <RequireSetup>
-              <Dashboard />
+              <PageTransition><Dashboard /></PageTransition>
             </RequireSetup>
           }
         />
@@ -33,7 +48,7 @@ export default function App() {
           path="/session"
           element={
             <RequireSetup>
-              <Session />
+              <PageTransition><Session /></PageTransition>
             </RequireSetup>
           }
         />
@@ -41,7 +56,7 @@ export default function App() {
           path="/checkin"
           element={
             <RequireSetup>
-              <MidWeekCheckin />
+              <PageTransition><MidWeekCheckin /></PageTransition>
             </RequireSetup>
           }
         />
@@ -49,7 +64,7 @@ export default function App() {
           path="/review"
           element={
             <RequireSetup>
-              <WeekReview />
+              <PageTransition><WeekReview /></PageTransition>
             </RequireSetup>
           }
         />
@@ -57,7 +72,7 @@ export default function App() {
           path="/history"
           element={
             <RequireSetup>
-              <History />
+              <PageTransition><History /></PageTransition>
             </RequireSetup>
           }
         />
@@ -65,13 +80,21 @@ export default function App() {
           path="/summary/:id"
           element={
             <RequireSetup>
-              <Summary />
+              <PageTransition><Summary /></PageTransition>
             </RequireSetup>
           }
         />
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+    </AnimatePresence>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   )
 }

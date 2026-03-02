@@ -32,7 +32,7 @@ export default function MidWeekCheckin() {
       <div className="min-h-screen p-4 flex items-center justify-center">
         <div className="card text-center space-y-4">
           <p className="text-4xl">🌱</p>
-          <p className="text-gray-500">אין שיחה פעילה השבוע</p>
+          <p className="text-gray-500">{strings.midweek.noActiveSession}</p>
           <button onClick={() => navigate('/')} className="btn-secondary w-full">
             {strings.common.back}
           </button>
@@ -248,7 +248,7 @@ function IntentionChips({ intentions }: { intentions: { personal: string; profes
   ].filter((i) => i.value.trim())
 
   if (items.length === 0) {
-    return <p className="text-xs text-gray-400 italic">לא נרשמו כוונות</p>
+    return <p className="text-xs text-gray-400 italic">{strings.midweek.noIntentions}</p>
   }
 
   return (
