@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #FDF6EC;
+  --color-primary: #C4704B;
+  --color-primary-light: #E8A87C;
+  --color-success: #7D9B76;
+  --color-highlight: #E8836B;
+  --color-text: #3D2C2C;
+  --color-card: #FFFFFF;
+  --color-sticky: #FEF3C7;
+}
+
+@layer base {
+  html {
+    direction: rtl;
+    font-family: 'Heebo', sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Rubik', sans-serif;
+    color: var(--color-text);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#C4704B] text-white font-medium rounded-full px-6 h-12
+           shadow-lg hover:bg-[#B06040] active:bg-[#A05030]
+           transition-all duration-200 flex items-center justify-center
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-[#C4704B] font-medium rounded-full px-6 h-12
+           border-2 border-[#C4704B] shadow-md hover:bg-[#FDF6EC]
+           active:bg-[#F5EDE0] transition-all duration-200
+           flex items-center justify-center;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-md p-6;
+  }
+
+  .card-sticky {
+    @apply bg-[#FEF3C7] rounded-2xl shadow-md p-6;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-gray-200 px-4 py-3
+           text-[#3D2C2C] placeholder-gray-400 bg-white
+           focus:outline-none focus:ring-2 focus:ring-[#C4704B] focus:border-transparent
+           text-right;
+  }
+
+  .textarea-field {
+    @apply w-full rounded-xl border border-gray-200 px-4 py-3
+           text-[#3D2C2C] placeholder-gray-400 bg-white resize-none
+           focus:outline-none focus:ring-2 focus:ring-[#C4704B] focus:border-transparent
+           text-right;
+  }
+}
