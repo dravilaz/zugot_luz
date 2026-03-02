@@ -147,7 +147,8 @@ export const strings = {
 
   // ─── Mid-week checkin ─────────────────────────────────────────────────────
   midweek: {
-    header: 'צ׳ק-אין אמצע שבוע 🌱',
+    header: 'איך הולך השבוע? 🌱',
+    subheader: 'צ׳ק-אין אמצע שבוע',
     subtitle: 'איך מרגישים? מה קרה עם הכוונות?',
     partner1Update: 'עדכון מ',
     partner2Update: 'עדכון מ',
@@ -155,12 +156,17 @@ export const strings = {
     onTrackLabel: 'כמה את/ה מרגיש/ה שאנחנו במסלול?',
     saveButton: 'שומרים 💾',
     savedMessage: 'נשמר! 💛',
+    intentionsRef: 'הכוונות שלנו השבוע 📌',
+    intentionsShow: 'הצגת כוונות ▼',
+    intentionsHide: 'הסתרת כוונות ▲',
+    previousCheckins: 'צ׳ק-אינים קודמים',
   },
 
   // ─── Week Review ──────────────────────────────────────────────────────────
   review: {
-    header: 'סיכום שבועי 📋',
-    subtitle: 'בואו נסתכל אחורה על השבוע שעבר',
+    header: 'בואו נסתכל אחורה על השבוע 🔄',
+    subtitle: 'השתקפות על השבוע שעבר',
+    intentionsThisWeek: 'הכוונות של השבוע',
     partner1Reflection: 'השתקפות של',
     partner2Reflection: 'השתקפות של',
     reflectionPlaceholder: 'מה היה השבוע עבורך?',
@@ -172,17 +178,23 @@ export const strings = {
     surprisesPlaceholder: 'רגעים בלתי צפויים...',
     overallFeeling: 'הרגשה כללית על השבוע',
     finishButton: 'סיימנו את הסיכום 🎉',
+    readyForNextWeek: 'מוכנים לשבוע הבא? 💪',
+    startNewSession: 'להתחיל שיחה חדשה ✨',
   },
 
   // ─── History ──────────────────────────────────────────────────────────────
   history: {
-    header: 'היסטוריה 📖',
+    header: 'ההיסטוריה שלנו 📚',
     subtitle: 'השיחות הקודמות שלכם',
-    noHistory: 'עדיין אין שיחות קודמות',
+    noHistory: 'עוד לא התחלתם — הכל לפניכם! 💛',
     weekLabel: 'שבוע',
-    completedLabel: 'הושלם',
-    inProgressLabel: 'בתהליך',
+    completedLabel: '✅ הושלם',
+    inProgressLabel: '🔄 בתהליך',
     viewSession: 'צפייה',
+    totalWeeks: 'שבועות',
+    streakLabel: 'ברצף 🔥',
+    expandDetails: 'פרטים ▼',
+    collapseDetails: 'סגירה ▲',
   },
 
   // ─── Summary ("תלוי על הדלת") ─────────────────────────────────────────────
@@ -190,9 +202,12 @@ export const strings = {
     header: 'תלוי על הדלת 🚪',
     subtitle: 'הכוונות של השבוע שלנו',
     printButton: 'הדפסה 🖨️',
+    shareButton: 'שתפו 📤',
+    copiedMessage: 'הועתק! 📋',
     partner1Intentions: 'הכוונות שלי',
     partner2Intentions: 'הכוונות שלך',
     datePlan: 'הדייט שלנו 💕',
+    calendarItems: 'יומן השבוע 📅',
     tasks: 'משימות',
   },
 

@@ -6,10 +6,12 @@ import { useSettingsStore } from '../store/useSettingsStore'
 import { WeekReview as WeekReviewType } from '../types'
 import { strings } from '../utils/strings'
 
+const FEELING_EMOJIS = ['😟', '😕', '😐', '🙂', '😊']
+
 export default function WeekReview() {
   const navigate = useNavigate()
   const { settings } = useSettingsStore()
-  const { getCurrentWeekSession, updateSession } = useSessionStore()
+  const { getCurrentWeekSession, updateSession, createNewSession } = useSessionStore()
   const session = getCurrentWeekSession()
 
   const existing = session?.weekReview
@@ -20,6 +22,7 @@ export default function WeekReview() {
   const [whatToImprove, setWhatToImprove] = useState(existing?.whatToImprove ?? '')
   const [surprises, setSurprises] = useState(existing?.surprises ?? '')
   const [overallFeeling, setOverallFeeling] = useState(existing?.overallFeeling ?? 3)
+  const [done, setDone] = useState(false)
 
   const s = strings.review
 
@@ -48,15 +51,72 @@ export default function WeekReview() {
       overallFeeling,
     }
     updateSession(session!.id, { weekReview })
-    navigate('/')
+    setDone(true)
+  }
+
+  function handleNewSession() {
+    createNewSession()
+    navigate('/session')
+  }
+
+  // After save: show "ready for next week" screen
+  if (done) {
+    return (
+      <div className="min-h-screen p-4 flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
+        <motion.div
+          className="max-w-md w-full card text-center space-y-6"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <p className="text-5xl">💪</p>
+          <div>
+            <h2 className="font-heading font-bold text-2xl text-[#3D2C2C]">
+              {s.readyForNextWeek}
+            </h2>
+            <p className="text-gray-500 mt-2 text-sm">{strings.step7.nextWeekReminder}</p>
+          </div>
+          <button onClick={handleNewSession} className="btn-primary w-full">
+            {s.startNewSession}
+          </button>
+          <button onClick={() => navigate('/')} className="btn-secondary w-full">
+            {strings.common.back}
+          </button>
+        </motion.div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen p-4" style={{ backgroundColor: 'var(--color-bg)' }}>
-      <div className="max-w-md mx-auto pt-6 space-y-6">
+    <div className="min-h-screen p-4 pb-12" style={{ backgroundColor: 'var(--color-bg)' }}>
+      <div className="max-w-md mx-auto pt-6 space-y-5">
+
+        {/* Header */}
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-heading font-bold text-3xl text-[#3D2C2C]">{s.header}</h1>
           <p className="text-gray-500 mt-1">{s.subtitle}</p>
+        </motion.div>
+
+        {/* Read-only intentions */}
+        <motion.div
+          className="card-sticky"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <h2 className="font-heading font-semibold text-base text-[#3D2C2C] mb-3">
+            {s.intentionsThisWeek} 📌
+          </h2>
+          <div className="space-y-4">
+            <ReadOnlyIntentions
+              name={settings.partner1Name}
+              intentions={session.partner1Intentions}
+            />
+            <div className="border-t border-yellow-200" />
+            <ReadOnlyIntentions
+              name={settings.partner2Name}
+              intentions={session.partner2Intentions}
+            />
+          </div>
         </motion.div>
 
         {/* Reflections */}
@@ -98,9 +158,7 @@ export default function WeekReview() {
           transition={{ delay: 0.15 }}
         >
           <div>
-            <label className="block text-sm font-medium text-[#3D2C2C] mb-2">
-              {s.whatWorked}
-            </label>
+            <label className="block text-sm font-medium text-[#3D2C2C] mb-2">{s.whatWorked}</label>
             <textarea
               className="textarea-field h-20"
               placeholder={s.whatWorkedPlaceholder}
@@ -109,9 +167,7 @@ export default function WeekReview() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#3D2C2C] mb-2">
-              {s.whatToImprove}
-            </label>
+            <label className="block text-sm font-medium text-[#3D2C2C] mb-2">{s.whatToImprove}</label>
             <textarea
               className="textarea-field h-20"
               placeholder={s.whatToImprovePlaceholder}
@@ -120,9 +176,7 @@ export default function WeekReview() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#3D2C2C] mb-2">
-              {s.surprises}
-            </label>
+            <label className="block text-sm font-medium text-[#3D2C2C] mb-2">{s.surprises}</label>
             <textarea
               className="textarea-field h-20"
               placeholder={s.surprisesPlaceholder}
@@ -132,31 +186,36 @@ export default function WeekReview() {
           </div>
         </motion.div>
 
-        {/* Overall feeling */}
+        {/* Emoji overall feeling */}
         <motion.div
           className="card space-y-4"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <p className="text-sm font-medium text-[#3D2C2C]">{s.overallFeeling}</p>
+          <p className="text-sm font-medium text-[#3D2C2C] text-center">{s.overallFeeling}</p>
           <div className="flex gap-2 justify-center">
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                onClick={() => setOverallFeeling(n)}
-                className={`w-12 h-12 rounded-full font-bold border-2 transition-all ${
-                  overallFeeling === n
-                    ? 'bg-[#C4704B] text-white border-[#C4704B] scale-110'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-[#C4704B]'
-                }`}
-              >
-                {n}
-              </button>
-            ))}
+            {FEELING_EMOJIS.map((emoji, i) => {
+              const val = i + 1
+              return (
+                <button
+                  key={val}
+                  onClick={() => setOverallFeeling(val)}
+                  className={`text-2xl w-12 h-12 rounded-full transition-all duration-200 ${
+                    overallFeeling === val
+                      ? 'bg-amber-100 scale-125 shadow-md ring-2 ring-[#C4704B]'
+                      : 'hover:bg-amber-50 hover:scale-110'
+                  }`}
+                  title={String(val)}
+                >
+                  {emoji}
+                </button>
+              )
+            })}
           </div>
         </motion.div>
 
+        {/* Actions */}
         <motion.div
           className="space-y-3"
           initial={{ opacity: 0 }}
@@ -171,6 +230,39 @@ export default function WeekReview() {
           </button>
         </motion.div>
       </div>
+    </div>
+  )
+}
+
+function ReadOnlyIntentions({
+  name,
+  intentions,
+}: {
+  name: string
+  intentions: { personal: string; professional: string; couple: string; family: string }
+}) {
+  const items = [
+    { label: strings.step2.personal, value: intentions.personal },
+    { label: strings.step2.professional, value: intentions.professional },
+    { label: strings.step2.coupleLabel, value: intentions.couple },
+    { label: strings.step2.family, value: intentions.family },
+  ].filter((i) => i.value.trim())
+
+  return (
+    <div>
+      <p className="text-xs font-semibold text-[#C4704B] mb-1.5">{name}</p>
+      {items.length === 0 ? (
+        <p className="text-xs text-gray-400 italic">לא נרשמו כוונות</p>
+      ) : (
+        <ul className="space-y-1">
+          {items.map((item) => (
+            <li key={item.label} className="flex gap-2 text-xs text-[#3D2C2C]">
+              <span className="text-gray-400 flex-shrink-0">{item.label}</span>
+              <span className="font-medium">{item.value}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
