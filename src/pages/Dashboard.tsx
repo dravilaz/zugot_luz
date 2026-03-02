@@ -10,10 +10,11 @@ const s = strings.dashboard
 export default function Dashboard() {
   const navigate = useNavigate()
   const { settings } = useSettingsStore()
-  const { getCurrentWeekSession, getStreak, createNewSession } = useSessionStore()
+  const { getCurrentWeekSession, getStreak, createNewSession, sessions } = useSessionStore()
 
   const currentSession = getCurrentWeekSession()
   const streak = getStreak()
+  const totalCompleted = sessions.filter((sess) => sess.completed).length
 
   function handleStartSession() {
     if (!currentSession) {
@@ -22,9 +23,20 @@ export default function Dashboard() {
     navigate('/session')
   }
 
+  const hasIntentions =
+    currentSession &&
+    (currentSession.partner1Intentions.personal ||
+      currentSession.partner1Intentions.professional ||
+      currentSession.partner1Intentions.couple ||
+      currentSession.partner1Intentions.family ||
+      currentSession.partner2Intentions.personal ||
+      currentSession.partner2Intentions.professional ||
+      currentSession.partner2Intentions.couple ||
+      currentSession.partner2Intentions.family)
+
   return (
     <div className="min-h-screen p-4" style={{ backgroundColor: 'var(--color-bg)' }}>
-      <div className="max-w-md mx-auto pt-8 space-y-6">
+      <div className="max-w-md mx-auto pt-8 space-y-5">
 
         {/* Greeting */}
         <motion.div
@@ -36,9 +48,7 @@ export default function Dashboard() {
             {s.greeting(settings.partner1Name, settings.partner2Name)}
           </h1>
           {streak > 0 && (
-            <p className="text-[#C4704B] font-medium">
-              {s.streakLabel(streak)}
-            </p>
+            <p className="text-[#C4704B] font-medium">{s.streakLabel(streak)}</p>
           )}
         </motion.div>
 
@@ -74,6 +84,51 @@ export default function Dashboard() {
           )}
         </motion.div>
 
+        {/* Sticky note with current intentions */}
+        {hasIntentions && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.4 }}
+            style={{ transform: 'rotate(1deg)' }}
+            className="relative bg-yellow-100 rounded-2xl shadow-md p-5"
+          >
+            {/* Pin */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-xl select-none pointer-events-none">
+              📌
+            </div>
+            <div className="flex items-center justify-between mb-3 pt-1">
+              <h2 className="font-heading font-semibold text-sm text-[#3D2C2C]">
+                {s.intentionsThisWeek}
+              </h2>
+              <button
+                onClick={() => navigate(`/summary/${currentSession!.id}`)}
+                className="text-xs text-[#C4704B] font-medium hover:underline"
+              >
+                {s.summaryLink}
+              </button>
+            </div>
+            <div className="space-y-3">
+              <IntentionMini
+                name={settings.partner1Name}
+                intentions={currentSession!.partner1Intentions}
+              />
+              {(currentSession!.partner2Intentions.personal ||
+                currentSession!.partner2Intentions.professional ||
+                currentSession!.partner2Intentions.couple ||
+                currentSession!.partner2Intentions.family) && (
+                <>
+                  <div className="border-t border-yellow-200" />
+                  <IntentionMini
+                    name={settings.partner2Name}
+                    intentions={currentSession!.partner2Intentions}
+                  />
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+
         {/* Primary action */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -81,10 +136,7 @@ export default function Dashboard() {
           transition={{ delay: 0.2, duration: 0.4 }}
         >
           {!currentSession?.completed && (
-            <button
-              onClick={handleStartSession}
-              className="btn-primary w-full text-base"
-            >
+            <button onClick={handleStartSession} className="btn-primary w-full text-base">
               {currentSession ? s.continueSession : s.newSession}
             </button>
           )}
@@ -97,6 +149,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.4 }}
         >
+          {/* Mid-week checkin: available once session is started */}
           {currentSession && !currentSession.completed && (
             <button
               onClick={() => navigate('/checkin')}
@@ -106,6 +159,7 @@ export default function Dashboard() {
             </button>
           )}
 
+          {/* Week review: available after session is completed */}
           {currentSession?.completed && (
             <button
               onClick={() => navigate('/review')}
@@ -117,15 +171,14 @@ export default function Dashboard() {
 
           <button
             onClick={() => navigate('/history')}
-            className="w-full h-12 rounded-full text-[#C4704B] font-medium text-base
-                       hover:bg-amber-50 transition-colors duration-200"
+            className="w-full h-12 rounded-full text-[#C4704B] font-medium text-base hover:bg-amber-50 transition-colors duration-200"
           >
             {s.history}
           </button>
         </motion.div>
 
         {/* Stats row */}
-        {streak > 0 && (
+        {(streak > 0 || totalCompleted > 0) && (
           <motion.div
             className="card-sticky flex justify-around text-center"
             initial={{ opacity: 0 }}
@@ -134,18 +187,44 @@ export default function Dashboard() {
           >
             <div>
               <p className="font-heading font-bold text-2xl text-[#C4704B]">{streak}</p>
-              <p className="text-xs text-gray-600 mt-1">שבועות ברצף</p>
+              <p className="text-xs text-gray-600 mt-1">שבועות ברצף 🔥</p>
             </div>
             <div className="border-r border-amber-200" />
             <div>
-              <p className="font-heading font-bold text-2xl text-[#C4704B]">
-                {useSessionStore.getState().sessions.filter(s => s.completed).length}
-              </p>
+              <p className="font-heading font-bold text-2xl text-[#C4704B]">{totalCompleted}</p>
               <p className="text-xs text-gray-600 mt-1">שיחות הושלמו</p>
             </div>
           </motion.div>
         )}
       </div>
+    </div>
+  )
+}
+
+function IntentionMini({
+  name,
+  intentions,
+}: {
+  name: string
+  intentions: { personal: string; professional: string; couple: string; family: string }
+}) {
+  const filled = [
+    intentions.personal,
+    intentions.professional,
+    intentions.couple,
+    intentions.family,
+  ].filter(Boolean)
+
+  if (filled.length === 0) return null
+
+  return (
+    <div>
+      <p className="text-xs font-semibold text-[#C4704B] mb-1">{name}</p>
+      <ul className="space-y-0.5">
+        {filled.map((v, i) => (
+          <li key={i} className="text-xs text-[#3D2C2C] truncate">• {v}</li>
+        ))}
+      </ul>
     </div>
   )
 }
