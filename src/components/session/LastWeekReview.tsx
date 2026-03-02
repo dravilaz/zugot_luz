@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import { WeeklySession, Intentions } from '../../types'
 import { strings } from '../../utils/strings'
 
+const s = strings.lastWeekReview
+
 interface Props {
   lastSession: WeeklySession | null
   partner1Name: string
@@ -34,11 +36,17 @@ export default function LastWeekReview({
           <p className="text-gray-500 text-sm">{strings.session.sensitiveNote}</p>
         </div>
         <button onClick={onNext} className="btn-primary w-full">
-          בואו נתחיל! 💛
+          {s.startButtonNew}
         </button>
       </motion.div>
     )
   }
+
+  const hasReflections = lastSession.weekReview && (
+    lastSession.weekReview.whatWorked ||
+    lastSession.weekReview.partner1Reflection ||
+    lastSession.weekReview.partner2Reflection
+  )
 
   return (
     <motion.div
@@ -58,21 +66,47 @@ export default function LastWeekReview({
 
       <div className="card-sticky space-y-3">
         <h3 className="font-heading font-bold text-lg text-[#3D2C2C]">
-          {partner1Name} — שבוע שעבר
+          {partner1Name} {s.lastWeekSuffix}
         </h3>
         <IntentionsList intentions={lastSession.partner1Intentions} />
       </div>
 
       <div className="card-sticky space-y-3">
         <h3 className="font-heading font-bold text-lg text-[#3D2C2C]">
-          {partner2Name} — שבוע שעבר
+          {partner2Name} {s.lastWeekSuffix}
         </h3>
         <IntentionsList intentions={lastSession.partner2Intentions} />
       </div>
 
+      {hasReflections && (
+        <div className="card space-y-3">
+          <h3 className="font-heading font-semibold text-base text-[#3D2C2C]">
+            {s.reflectionsTitle} 💭
+          </h3>
+          {lastSession.weekReview!.partner1Reflection && (
+            <div>
+              <p className="text-xs font-medium text-[#C4704B] mb-0.5">{partner1Name}</p>
+              <p className="text-sm text-gray-700">{lastSession.weekReview!.partner1Reflection}</p>
+            </div>
+          )}
+          {lastSession.weekReview!.partner2Reflection && (
+            <div>
+              <p className="text-xs font-medium text-[#C4704B] mb-0.5">{partner2Name}</p>
+              <p className="text-sm text-gray-700">{lastSession.weekReview!.partner2Reflection}</p>
+            </div>
+          )}
+          {lastSession.weekReview!.whatWorked && (
+            <div>
+              <p className="text-xs font-medium text-[#7D9B76] mb-0.5">{strings.review.whatWorked}</p>
+              <p className="text-sm text-gray-700">{lastSession.weekReview!.whatWorked}</p>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="space-y-3">
         <button onClick={onNext} className="btn-primary w-full">
-          בואו נתחיל! 💛
+          {s.startButtonReturning}
         </button>
         <button onClick={onPause} className="btn-secondary w-full">
           {strings.session.pauseButton}
@@ -92,7 +126,7 @@ function IntentionsList({ intentions }: { intentions: Intentions }) {
   const filled = items.filter((i) => i.value.trim())
 
   if (filled.length === 0) {
-    return <p className="text-gray-400 text-sm">אין כוונות שנרשמו</p>
+    return <p className="text-gray-400 text-sm">{s.noIntentions}</p>
   }
 
   return (

@@ -83,8 +83,9 @@ export default function SessionStep3({
             <input
               type="text"
               className="input-field"
-              placeholder="מה יש ביומן?"
+              placeholder={s.itemPlaceholder}
               value={item.description}
+              aria-label={s.itemPlaceholder}
               onChange={(e) => updateItem(item.id, { description: e.target.value })}
             />
             <div className="flex gap-2 flex-wrap items-center">
@@ -105,9 +106,10 @@ export default function SessionStep3({
               <button
                 type="button"
                 onClick={() => removeItem(item.id)}
+                aria-label={s.removeItem}
                 className="text-xs px-3 py-1.5 rounded-full border border-red-100 text-red-400 hover:bg-red-50 transition-colors mr-auto"
               >
-                הסרה
+                {s.removeItem}
               </button>
             </div>
           </div>

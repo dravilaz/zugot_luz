@@ -91,7 +91,7 @@ export default function SessionStep5({ session, onNext, onBack, onPause }: Props
               exit={{ opacity: 0, height: 0 }}
             >
               <div>
-                <p className="text-sm font-medium text-[#3D2C2C] mb-2">סוג הדייט</p>
+                <p className="text-sm font-medium text-[#3D2C2C] mb-2">{s.dateTypeLabel}</p>
                 <div className="flex flex-wrap gap-2">
                   {DATE_TYPES.map((dt) => (
                     <button

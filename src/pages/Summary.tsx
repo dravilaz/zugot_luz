@@ -23,7 +23,7 @@ export default function Summary() {
       <div className="min-h-screen p-4 flex items-center justify-center">
         <div className="card text-center space-y-4">
           <p className="text-4xl">🚫</p>
-          <p className="text-gray-500">השיחה לא נמצאה</p>
+          <p className="text-gray-500">{s.notFound}</p>
           <button onClick={() => navigate('/')} className="btn-secondary">
             {strings.common.back}
           </button>
@@ -238,7 +238,7 @@ function IntentionsList({ intentions }: { intentions: Intentions }) {
   const filled = items.filter((i) => i.value.trim())
 
   if (filled.length === 0) {
-    return <p className="text-gray-400 text-sm italic">אין כוונות שנרשמו</p>
+    return <p className="text-gray-400 text-sm italic">{strings.summary.noIntentions}</p>
   }
 
   return (

@@ -81,11 +81,15 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
 
   createNewSession: () => {
     const now = new Date().toISOString()
+    const weekStart = getCurrentWeekStart()
+    const hasPreviousSessions = get().sessions.some(
+      (s) => !isSameWeek(s.weekStartDate, weekStart)
+    )
     const newSession: WeeklySession = {
       id: generateId(),
-      weekStartDate: getCurrentWeekStart(),
+      weekStartDate: weekStart,
       createdAt: now,
-      currentStep: 0,
+      currentStep: hasPreviousSessions ? 0 : 1,
       partner1Mood: '',
       partner2Mood: '',
       partner1Intentions: { ...DEFAULT_INTENTIONS },

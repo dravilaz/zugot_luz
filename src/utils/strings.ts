@@ -26,6 +26,16 @@ export const strings = {
     welcomeBack: 'שמחים שחזרתם 💛',
   },
 
+  // ─── Last Week Review ────────────────────────────────────────────────────
+  lastWeekReview: {
+    startButtonNew: 'בואו נתחיל! 💛',
+    startButtonReturning: 'יפה! בואו נתחיל שבוע חדש ▶️',
+    lastWeekSuffix: '— שבוע שעבר',
+    noIntentions: 'אין כוונות שנרשמו',
+    reflectionsTitle: 'השתקפויות מהשבוע שעבר',
+    removeItem: 'הסרה',
+  },
+
   // ─── Step 1 — Check-in ───────────────────────────────────────────────────
   step1: {
     header: 'לפני הכל... מה שלומכם? 🌿',
@@ -57,6 +67,8 @@ export const strings = {
     subtitle: 'תכנון קדימה של כל מה שיכול להוריד עומס מתקשורת יום-יום',
     helper: 'מי עם הילדים? מתי לחזור הביתה? אירועים שיש?',
     addItem: 'הוסיפו פריט +',
+    itemPlaceholder: 'מה יש ביומן?',
+    removeItem: 'הסרה',
     assignedPartner1: 'בן/בת הזוג 1',
     assignedPartner2: 'בן/בת הזוג 2',
     assignedBoth: 'שניכם',
@@ -93,6 +105,7 @@ export const strings = {
       phone: '📱 דייט בטלפון',
       other: '✨ משהו אחר',
     },
+    dateTypeLabel: 'סוג הדייט',
     sweet: 'אתם חמודים 💛 פנו לעצמיכם זמן איכותי!',
     time: '⏱️ 5 דקות',
     plannedYes: 'כן, תכננו!',
@@ -143,6 +156,8 @@ export const strings = {
     weekStarted: 'שיחת השבוע בעיצומה',
     weekCompleted: 'שיחת השבוע הושלמה ✓',
     intentionsThisWeek: 'הכוונות של השבוע',
+    streakWeeks: 'שבועות ברצף 🔥',
+    sessionsCompleted: 'שיחות הושלמו',
   },
 
   // ─── Mid-week checkin ─────────────────────────────────────────────────────
@@ -160,6 +175,8 @@ export const strings = {
     intentionsShow: 'הצגת כוונות ▼',
     intentionsHide: 'הסתרת כוונות ▲',
     previousCheckins: 'צ׳ק-אינים קודמים',
+    noActiveSession: 'אין שיחה פעילה השבוע',
+    noIntentions: 'לא נרשמו כוונות',
   },
 
   // ─── Week Review ──────────────────────────────────────────────────────────
@@ -180,6 +197,8 @@ export const strings = {
     finishButton: 'סיימנו את הסיכום 🎉',
     readyForNextWeek: 'מוכנים לשבוע הבא? 💪',
     startNewSession: 'להתחיל שיחה חדשה ✨',
+    noActiveSession: 'אין שיחה פעילה השבוע',
+    noIntentions: 'לא נרשמו כוונות',
   },
 
   // ─── History ──────────────────────────────────────────────────────────────
@@ -209,6 +228,8 @@ export const strings = {
     datePlan: 'הדייט שלנו 💕',
     calendarItems: 'יומן השבוע 📅',
     tasks: 'משימות',
+    notFound: 'השיחה לא נמצאה',
+    noIntentions: 'אין כוונות שנרשמו',
   },
 
   // ─── Common ───────────────────────────────────────────────────────────────
